@@ -1,14 +1,8 @@
-<% provide(:title, 'Home') %>
-<!DOCTYPE html>
-<html>
-  <head>
+<% provide(:title, ' | Home') %>
     <title>Ruby on Rails Tutorial Sample App | <%= yield(:title) %></title>
-  </head>
-  <body>
     <h1>Sample App</h1>
     <p>
       This is the home page for the
       sample application.
     </p>
-  </body>
-</html>
+    <%= link_to "Sign up now!", '#', class: "signup_button round" %>
