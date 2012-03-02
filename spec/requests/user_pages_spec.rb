@@ -29,6 +29,16 @@ describe "UserPages" do
   describe "signup" do #Listing 7.15. http://ruby.railstutorial.org/chapters/sign-up?version=3.2#fnref:7.7
 
       before { visit signup_path }
+      
+      #检查返回错误
+      describe "error messages" do
+        before { click_button "Sign up" }
+
+        let(:error) { 'errors prohibited this user from being saved' }
+
+        it { should have_selector('title', text: 'Sign up') }
+        it { should have_content(error) }
+      end
 
       describe "with invalid information" do
         it "should not create a user" do
@@ -46,6 +56,15 @@ describe "UserPages" do
 
         it "should create a user" do
           expect { click_button "Sign up" }.to change(User, :count).by(1)
+        end
+        
+        describe "after saving the user" do #检查flash
+          before { click_button "Sign up" }
+          let(:user) { User.find_by_email('user@example.com') }
+
+          it { should have_selector('title', text: user.name) }
+          it { should have_selector('div.flash.success', text: 'Welcome') }
+          it { should have_link('Sign out') }
         end
       end
     end
