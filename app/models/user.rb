@@ -10,9 +10,12 @@
 #
 
 class User < ActiveRecord::Base
+  #it is a good practice to define attr_accessible for every model.
   attr_accessible :name, :email, :password, :password_confirmation
+  
   has_secure_password
   before_save :create_remember_token
+  
   
   validates :name, presence: true, length: { maximum: 50 }
   valid_email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -21,7 +24,9 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }
         
   private
-
+      def signed_in_user
+        redirect_to signin_path, notice: "Please sign in." unless signed_in?
+      end
       def create_remember_token
         self.remember_token = SecureRandom.urlsafe_base64
       end    
