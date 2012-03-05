@@ -12,8 +12,9 @@
 class User < ActiveRecord::Base
   #it is a good practice to define attr_accessible for every model.
   attr_accessible :name, :email, :password, :password_confirmation
-  
   has_secure_password
+  has_many :microposts, dependent: :destroy
+  
   before_save :create_remember_token
   
   
@@ -22,6 +23,12 @@ class User < ActiveRecord::Base
   validates :email, presence: true, format: { with: valid_email_regex },
             uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }
+  
+  def feed
+      # This is preliminary. See "Following users" for the full implementation.
+      #Micropost.where("user_id = ?", id)
+      microposts
+  end
         
   private
       def signed_in_user
